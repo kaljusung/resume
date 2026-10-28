@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="갈주성">
+  <meta name="description" content="경력기술서 출력용 축약본 (A4)">
+  <title>갈주성 | 클라이언트 프로그래머 · 경력 기술서</title>
+  <!--
+    A4 출력용 원본입니다. 이 파일을 Chrome에서 열고
+    인쇄 → 대상: PDF로 저장 → 용지 A4 → 여백: 기본값 → '배경 그래픽' 켜기 → '머리글과 바닥글' 끄기
+    로 저장하면 상위 폴더의 '경력기술서(출력용 축약본)-갈주성.pdf'와 같은 결과가 나옵니다.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Noto+Sans+KR:wght@200;300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --paper:#ffffff;
+      --ink:#26292b;
+      --ink-2:#565d61;
+      --ink-3:#868d91;
+      --hair:#dcdfe1;
+      --hair-2:#c2c7ca;
+      --coral:#ff8186;
+      --coral-ink:#c4474f;
+      --blue:#7a93f2;
+      --blue-ink:#4a62c2;
+      --blue-plane:rgba(112,140,255,.14);
+      --sans:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+      --mono:'DM Mono',ui-monospace,'SFMono-Regular',Consolas,monospace;
+      --label:45mm;          /* 왼쪽 열 폭: 문서 전체에서 같은 선에 맞춘다 */
+      --gap:5mm;
+    }
+
+    @page{
+      size:A4 portrait;
+      margin:16mm 15mm 18mm;
+      @bottom-left{content:"갈주성 | 클라이언트 프로그래머";font:300 7pt/1 var(--sans);color:var(--ink-3);vertical-align:top;padding-top:6mm}
+      @bottom-right{content:counter(page,decimal-leading-zero);font:400 7pt/1 var(--mono);letter-spacing:.04em;color:var(--ink-3);vertical-align:top;padding-top:6mm}
+    }
+
+    *{box-sizing:border-box}
+    html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body{margin:0;background:var(--paper);color:var(--ink);font:300 8.8pt/1.6 var(--sans);word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3,h4,p{margin:0}
+
+    /* 화면에서 열었을 때 종이처럼 보이게 */
+    @media screen{
+      html{background:#f3f4f5}
+      body{width:210mm;margin:24px auto;padding:16mm 15mm 18mm;box-shadow:0 0 0 1px var(--hair)}
+    }
+
+    /* ── 머리 ── */
+    .doc-head{padding:2mm 0 9mm}
+    .doc-head h1{font-size:27pt;font-weight:200;line-height:1.15;letter-spacing:-.06em}
+    .doc-head h1 .bar{color:var(--hair-2);font-weight:200;padding:0 .08em}
+    .doc-head p{margin-top:3mm;font-size:9.5pt;color:var(--ink-2)}
+
+    /* ── 대분류: 위에 얇은 선 ── */
+    .sec{border-top:.75pt solid var(--hair);padding-top:6.5mm;margin-top:7mm}
+    .doc-head+.sec{margin-top:0}
+    .sec.page{break-before:page;margin-top:0}   /* 경력은 새 쪽에서 시작해 사례가 쪽 사이로 갈리지 않게 */
+    .sec>h2{display:flex;align-items:center;gap:3mm;margin-bottom:5mm;font-size:17pt;font-weight:200;line-height:1.3;letter-spacing:-.055em;break-after:avoid-page}
+    .sec>h2::before{content:"";flex:none;width:1.1pt;height:5.4mm;background:var(--blue)}
+
+    /* ── 소분류 ── */
+    .group+.group{margin-top:6mm}
+    .group>h3{margin-bottom:2mm;font-size:11pt;font-weight:400;line-height:1.45;letter-spacing:-.04em;break-after:avoid-page}
+    .group>h3 .note{color:var(--ink-3);font-weight:300}
+    .context{margin:-2mm 0 6mm;font-size:9pt;color:var(--ink-2)}
+    .context b{font:400 9.5pt var(--mono);letter-spacing:.01em;color:var(--ink)}
+    .context .mono{font-family:var(--mono);font-size:8.4pt;letter-spacing:.03em;color:var(--blue-ink)}
+
+    /* ── 목록: 맨 위 진한 선, 행 사이 연한 선 ── */
+    .list{border-top:.75pt solid var(--ink)}
+    .row{display:grid;grid-template-columns:var(--label) minmax(0,1fr);gap:var(--gap);padding:2.1mm 0 2.2mm;border-bottom:.5pt solid var(--hair);break-inside:avoid}
+    .row dt,.row .k{font-size:8.6pt;font-weight:500;line-height:1.6;letter-spacing:-.02em;color:var(--ink)}
+    .row dd,.row .v{margin:0;color:var(--ink-2)}
+    .row dd.stack{font:400 8.2pt/1.7 var(--mono);letter-spacing:.005em;color:var(--ink)}
+    .row dd.date{font-variant-numeric:tabular-nums}
+    dl{margin:0}
+
+    /* 자격: 4열 */
+    .cred{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4mm;padding:2.6mm 0 2.8mm;border-top:.75pt solid var(--ink);border-bottom:.5pt solid var(--hair);break-inside:avoid}
+    .cred dt{font-size:9.6pt;font-weight:500;line-height:1.45;letter-spacing:-.03em}
+    .cred dd{margin:.6mm 0 0;font-size:7.8pt;line-height:1.5;color:var(--ink-3);font-variant-numeric:tabular-nums}
+
+    /* 사례: 제목 왼쪽, 문제·구현·결과 오른쪽 */
+    .case{display:grid;grid-template-columns:var(--label) minmax(0,1fr);gap:var(--gap);padding:2.8mm 0 3mm;border-bottom:.5pt solid var(--hair);break-inside:avoid}
+    .case h4{font-size:9.6pt;font-weight:500;line-height:1.5;letter-spacing:-.03em}
+    .case dl>div{display:grid;grid-template-columns:15mm minmax(0,1fr);align-items:start;gap:2.5mm;padding:.5mm 0}
+    .case dt{display:flex;align-items:center;gap:1.4mm;font-size:7.8pt;font-weight:500;line-height:14.08pt;color:var(--ink-3);white-space:nowrap}
+    .case dt.out{color:var(--coral-ink)}
+    .case dl>div.wide{grid-template-columns:27mm minmax(0,1fr)}
+    .case dd{margin:0;color:var(--ink-2)}
+
+    /* 외부 포트폴리오 링크: 위·오른쪽으로 비껴 놓인 파란 면 */
+    .portfolio{display:flex;align-items:center;justify-content:space-between;gap:6mm;margin:1.5mm 1.5mm 0 0;padding:4mm 5mm;border:.5pt solid var(--hair);background:var(--paper);box-shadow:1.5mm -1.5mm 0 0 var(--blue-plane);break-inside:avoid}
+    .portfolio span{font-size:9.6pt;font-weight:500;letter-spacing:-.03em}
+    .portfolio i{font-style:normal;color:var(--coral);font-size:10pt}
+  </style>
+</head>
+<body>
+  <header class="doc-head">
+    <h1>갈주성<span class="bar"> | </span>클라이언트 프로그래머</h1>
+    <p>총 경력 4년 6개월</p>
+  </header>
+
+  <section class="sec">
+    <h2>경력 요약과 보유 기술</h2>
+
+    <div class="group">
+      <h3>자격 · 어학 · 해외 경험</h3>
+      <dl class="cred">
+        <div><dt>호주 어학연수</dt><dd>2013.06 - 2014.12</dd></div>
+        <div><dt>TOEIC 805</dt><dd>2025.11.09 취득 · ETS</dd></div>
+        <div><dt>OPIc IH</dt><dd>2025.10.31 취득 · ACTFL</dd></div>
+        <div><dt>정보처리기사</dt><dd>2023.09.01 취득 · 한국산업인력공단</dd></div>
+      </dl>
+    </div>
+
+    <div class="group">
+      <h3>경력 요약</h3>
+      <dl class="list">
+        <div class="row"><dt>Unreal Engine 4 / C++ 3년 6개월</dt><dd>라이브 UI·카메라·채팅·장비·던전·이벤트 개발</dd></div>
+        <div class="row"><dt>Unity / C# 1년</dt><dd>신규 프로젝트 연출·사운드·외형·프리뷰·서버 연동 개발</dd></div>
+        <div class="row"><dt>시스템 설계·개선</dt><dd>신규 공통 시스템 설계, 기존 기능 구조 개선, 비동기·생명주기 관리</dd></div>
+        <div class="row"><dt>라이브 서비스 대응</dt><dd>현지화 DB 수정, Jenkins 작업 지원, 해외 인력 기술 이전, 기능 및 콘텐츠 개발</dd></div>
+      </dl>
+    </div>
+
+    <div class="group">
+      <h3>보유 기술</h3>
+      <dl class="list">
+        <div class="row"><dt>주력 실무</dt><dd class="stack">C++, C#, Unreal Engine 4, Unity</dd></div>
+        <div class="row"><dt>Unity·라이브러리</dt><dd class="stack">Addressables, UniTask, DOTween, Cinemachine, AudioMixer, Timeline / Signal, ScriptableObject, Spine</dd></div>
+        <div class="row"><dt>기타 보유 기술</dt><dd class="stack">SQL, HLSL, Git, SVN, Unity Version Control, Jira, Confluence, Jenkins</dd></div>
+        <div class="row"><dt>개인 프로젝트</dt><dd class="stack">DirectX 9 / 11, Windows API, Maya, XGen, V-Ray, Houdini, RealFlow, Nuke</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec page">
+    <h2>경력</h2>
+    <p class="context"><b>NPIXEL</b> | 클라이언트 프로그래머 · <span class="mono">2021.05 - 2025.11</span></p>
+
+    <div class="group">
+      <h3>Unity / C# <span class="note">· 신규 프로젝트</span></h3>
+      <div class="list">
+        <article class="case"><h4>연출 시퀀스 시스템</h4><dl>
+          <div><dt>문제</dt><dd>콘텐츠별 연출 순서·설정 변경 시 코드 수정 필요</dd></div>
+          <div><dt>구현</dt><dd>데이터 테이블, 실행 단위 객체, Queue·UniTask·CancellationToken 적용</dd></div>
+          <div><dt class="out">결과</dt><dd>연출 순서·파라미터 데이터화, 기능 재사용·중단 처리</dd></div>
+        </dl></article>
+        <article class="case"><h4>사운드 시스템</h4><dl>
+          <div><dt>문제</dt><dd>사운드 관리 시스템 부재. 콘텐츠 중첩 시 BGM 복귀 오류, 중복 요청, 잔여 SFX 가능성</dd></div>
+          <div><dt>구현</dt><dd>BGM Stack, 요청 디바운싱, SFX 그룹·생명주기 관리</dd></div>
+          <div><dt class="out">결과</dt><dd>BGM 전환·복귀, 동시 재생 수·잔여 SFX 통합 제어</dd></div>
+        </dl></article>
+        <article class="case"><h4>RenderTexture 프리뷰</h4><dl>
+          <div><dt>문제</dt><dd>캐릭터 모습 UI배치 니즈 발생. 3D·Spine 객체를 UI에 직접 배치하면 Sorting Order 예외 증가</dd></div>
+          <div><dt>구현</dt><dd>별도 카메라·RenderTexture 사용, Instance ID 기준 대상 관리</dd></div>
+          <div><dt class="out">결과</dt><dd>기존 렌더링 규칙 유지, 다중 프리뷰·대상 교체 지원</dd></div>
+        </dl></article>
+        <article class="case"><h4>캐릭터 외형 시스템</h4><dl>
+          <div><dt>문제</dt><dd>실제 장비에서 파생 된 외형 장비, 캐릭터 바디 및 꾸미기 아이템 니즈 발생. 갱신 빈도 높음.</dd></div>
+          <div><dt>구현</dt><dd>변경 파츠만 병렬 로드, 기존 작업 취소, 객체 생명주기 연동</dd></div>
+          <div><dt class="out">결과</dt><dd>갱신에 따른 퍼포먼스 저하 문제 해결, 연속 외형 변경 안정화</dd></div>
+        </dl></article>
+        <article class="case"><h4>그 외 Unity 업무</h4><dl>
+          <div class="wide"><dt>데이터·서버 연동</dt><dd>JSON 직렬화·역직렬화 구조 및 서버 연동 콘텐츠 개발</dd></div>
+          <div class="wide"><dt>파티클 플러그인 확장</dt><dd>프로젝트 요구에 맞춰 기능·물리량·편집 기능 수정</dd></div>
+        </dl></article>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Unreal Engine 4 / C++ <span class="note">· 라이브 서비스</span></h3>
+      <div class="list">
+        <article class="case"><h4>장비 프리셋 구조 개편</h4><dl>
+          <div><dt>상황</dt><dd>전체 보유 캐릭터 단위 → 캐릭터 별 복수 프리셋 으로 구조 변경 요청. 이에 따른 장비 및 아이템 데이터 구조 및 로직 변경</dd></div>
+          <div><dt>구현</dt><dd>장비·아이템 저장·조회·적용 로직과 중복 장착 검증 등을 변경된 데이터 구조에 맞춰 재구성, 다회에 걸친 재검증.</dd></div>
+          <div><dt class="out">결과</dt><dd>콘텐츠별 캐릭터·장비 조합 지원</dd></div>
+        </dl></article>
+        <article class="case"><h4>채팅 시스템 신규 구현</h4><dl>
+          <div><dt>상황</dt><dd>사내 타 프로젝트 지원. 해당 프로젝트에 채팅 기능 부재</dd></div>
+          <div><dt>구현</dt><dd>일반·지역·귓속말·파티 채팅, 브로드캐스팅 기능 및 UI 구현</dd></div>
+          <div><dt class="out">결과</dt><dd>기본 채팅부터 채널 별 기능까지 신규 구축</dd></div>
+        </dl></article>
+        <article class="case"><h4>잔여 시간 UI 공통화</h4><dl>
+          <div><dt>문제</dt><dd>콘텐츠마다 시간 계산·표시·종료 로직 중복</dd></div>
+          <div><dt>구현</dt><dd>시간 처리 공통 클래스 분리, 기존 UI 구조 유지</dd></div>
+          <div><dt class="out">결과</dt><dd>화면 변경 없이 공통 로직 재사용</dd></div>
+        </dl></article>
+        <article class="case"><h4>라이브 콘텐츠 개발·유지보수</h4><dl>
+          <div class="wide"><dt>콘텐츠 개발</dt><dd>UI, 카메라, 장비, 던전, 이벤트 기능 개발</dd></div>
+          <div class="wide"><dt>구조 개선</dt><dd>기획 변경에 맞춰 데이터·UI·로직 개편</dd></div>
+          <div class="wide"><dt>라이브 대응</dt><dd>서비스 이슈 수정, 브랜치·빌드 관리, Jenkins 잡 실행·파라미터 관리</dd></div>
+        </dl></article>
+        <article class="case"><h4>현지화 DB·해외 협업</h4><dl>
+          <div class="wide"><dt>DB 작업</dt><dd>SQL로 번역 데이터 조회·수정</dd></div>
+          <div class="wide"><dt>기술 이전</dt><dd>해외 인력 대상 작업 절차·기술 내용 인계</dd></div>
+        </dl></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>그래픽스·물리 개발 경험</h2>
+    <div class="group">
+      <h3>작업 내용</h3>
+      <dl class="list">
+        <div class="row"><dt>Unity 파티클 플러그인 확장</dt><dd>실무 프로젝트 요구에 맞춰 상용 플러그인 기능 수정 및 개발</dd></div>
+        <div class="row"><dt>HLSL 후처리</dt><dd>화면 왜곡·분할·색감 필터 구현</dd></div>
+        <div class="row"><dt>파티클·편집 도구</dt><dd>고전역학 기반 파티클 시스템·이펙트 편집 기능 구현</dd></div>
+        <div class="row"><dt>포워드 렌더링</dt><dd>렌즈 블러·피사계 심도 구현</dd></div>
+        <div class="row"><dt>물리 기능</dt><dd>마찰력·관성·투사체 예상 경로 구현</dd></div>
+        <div class="row"><dt>피격 판정</dt><dd>투사체·Hitscan·반사 처리 구현</dd></div>
+        <div class="row"><dt>VFX 제작</dt><dd>Maya, XGen, V-Ray, Houdini, RealFlow, Nuke 사용</dd></div>
+      </dl>
+    </div>
+    <div class="group">
+      <h3>그래픽 포트폴리오</h3>
+      <a class="portfolio" href="https://kaljusung.github.io/directx-graphics-portfolio/"><span>DirectX 기반 그래픽스 포트폴리오 보기</span><i aria-hidden="true">↗</i></a>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>개인 도구 개발</h2>
+    <dl class="list">
+      <div class="row"><dt>데이터 코드 생성 도구</dt><dd>스키마 기반 CSV 형식과 C# 캐싱 코드 자동 생성</dd></div>
+    </dl>
+  </section>
+</body>
+</html>
